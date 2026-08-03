@@ -43,23 +43,32 @@ StartupWMClass=Ghostty Theme Changer
 - **Search and filter** — by name, or narrow it to dark ones, light ones, or your favorites.
 - **Favorites** — the star on a card, remembered between sessions.
 
-Each card also shows the theme's background color and a legibility score — the contrast ratio
-between foreground and background. Anything below 4.5 is flagged, since that's where text starts
-getting hard to read.
+Each card also shows the theme's background color and how legible it is, so you can rule one out
+before trying it.
 
-## How it works
+## Questions you probably have
 
-Your choice is written to your Ghostty config as a single `theme` line. The old file is copied to a
-backup first (the last five are kept), and everything else in it is left untouched.
+**Will it mess up my config?**
+No. It only touches the `theme` line — every other setting you've written stays exactly where it
+was. Before each change your config is copied to a backup (the five most recent are kept), so you
+can always go back.
 
-Then every running Ghostty process gets `SIGUSR2` — Ghostty's signal to re-read its configuration.
-That's why open windows change color without a restart: Ghostty doesn't watch the config file, but
-it does answer that signal.
+**Why don't my terminals need a restart?**
+Ghostty doesn't watch its config file, but it does reload when it receives `SIGUSR2`. So the app
+writes the theme and sends that signal to every running Ghostty process. Your windows change color
+mid-session — same tabs, same running commands, nothing lost.
 
-Themes are read from Ghostty's built-in theme directory (`$GHOSTTY_RESOURCES_DIR/themes`, falling
-back to `/usr/share/ghostty/themes`) and from your own in `~/.config/ghostty/themes`. If a name
-exists in both, yours wins.
+**Will it find the themes I made myself?**
+Yes. It reads Ghostty's built-in themes (`$GHOSTTY_RESOURCES_DIR/themes`, falling back to
+`/usr/share/ghostty/themes`) and your own in `~/.config/ghostty/themes`. If the same name exists in
+both, yours wins. Drop a new theme file in and reopen the app to see it.
 
-Linux only for now — the reload signal is sent with `pkill -USR2`.
+**What's that number on each card?**
+The contrast ratio between the theme's text and its background. Below 4.5 it turns amber — that's
+roughly where text starts being tiring to read.
 
-Built with Electron, React, Zustand and Chakra UI. Code comments are in Indonesian.
+## Good to know
+
+- **Linux only for now.** The reload signal is sent with `pkill -USR2`.
+- Built with Electron, React, Zustand and Chakra UI.
+- The code comments are in Indonesian.
